@@ -49,13 +49,13 @@ class TestScanOperations:
             name="Test Scan",
             safe_mode=True
         )
-        assert scan.target == "example.com"
-        assert scan.status == ScanStatus.PENDING.value
+        assert scan["target"] == "example.com"
+        assert scan["status"] == ScanStatus.PENDING.value
 
     def test_get_scan(self, clean_database):
         """Test getting a scan by ID."""
         scan = clean_database.create_scan(target="example.com")
-        result = clean_database.get_scan(scan.id)
+        result = clean_database.get_scan(scan["id"])
         assert result is not None
         assert result["target"] == "example.com"
 
@@ -68,7 +68,7 @@ class TestScanOperations:
         """Test updating a scan."""
         scan = clean_database.create_scan(target="example.com")
         result = clean_database.update_scan(
-            scan.id,
+            scan["id"],
             status=ScanStatus.RUNNING.value
         )
         assert result["status"] == ScanStatus.RUNNING.value
@@ -85,7 +85,7 @@ class TestScanOperations:
         """Test listing scans with status filter."""
         clean_database.create_scan(target="example1.com")
         scan2 = clean_database.create_scan(target="example2.com")
-        clean_database.update_scan(scan2.id, status=ScanStatus.COMPLETED.value)
+        clean_database.update_scan(scan2["id"], status=ScanStatus.COMPLETED.value)
 
         scans = clean_database.list_scans(status=ScanStatus.COMPLETED.value)
         assert len(scans) == 1
@@ -100,7 +100,7 @@ class TestFindingOperations:
         scan = clean_database.create_scan(target="example.com")
 
         finding = clean_database.add_finding(
-            scan_id=scan.id,
+            scan_id=scan["id"],
             **sample_finding
         )
 
@@ -111,18 +111,18 @@ class TestFindingOperations:
         """Test that adding finding updates scan counts."""
         scan = clean_database.create_scan(target="example.com")
 
-        clean_database.add_finding(scan_id=scan.id, **sample_finding)
+        clean_database.add_finding(scan_id=scan["id"], **sample_finding)
 
-        updated_scan = clean_database.get_scan(scan.id)
+        updated_scan = clean_database.get_scan(scan["id"])
         assert updated_scan["total_findings"] == 1
         assert updated_scan["critical_count"] == 1
 
     def test_get_findings(self, clean_database, sample_finding):
         """Test getting findings for a scan."""
         scan = clean_database.create_scan(target="example.com")
-        clean_database.add_finding(scan_id=scan.id, **sample_finding)
+        clean_database.add_finding(scan_id=scan["id"], **sample_finding)
 
-        findings = clean_database.get_findings(scan.id)
+        findings = clean_database.get_findings(scan["id"])
         assert len(findings) == 1
         assert findings[0]["title"] == sample_finding["title"]
 
@@ -131,15 +131,15 @@ class TestFindingOperations:
         scan = clean_database.create_scan(target="example.com")
 
         # Add critical finding
-        clean_database.add_finding(scan_id=scan.id, **sample_finding)
+        clean_database.add_finding(scan_id=scan["id"], **sample_finding)
 
         # Add low finding
         sample_finding["severity"] = "low"
         sample_finding["title"] = "Low severity issue"
-        clean_database.add_finding(scan_id=scan.id, **sample_finding)
+        clean_database.add_finding(scan_id=scan["id"], **sample_finding)
 
         critical_findings = clean_database.get_findings(
-            scan.id,
+            scan["id"],
             severity="critical"
         )
         assert len(critical_findings) == 1

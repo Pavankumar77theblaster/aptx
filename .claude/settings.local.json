@@ -6,7 +6,14 @@
       "Bash(cat:*)",
       "Bash(curl:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: APT-X Automated Penetration Testing Framework\n\nFeatures:\n- Core framework (config, database, pipeline, scope validation, rate limiting)\n- Reconnaissance modules (subdomain enum, port scan, web discovery)\n- 9 vulnerability scanners (SQLi, XSS, IDOR, SSRF, Command Injection, etc.)\n- Intelligence engine with ML-based classification\n- Professional report generation (HTML, JSON, PDF)\n- FastAPI web dashboard\n- Plugin system with SDK\n- Data feeds module for payload/wordlist ingestion\n- Comprehensive test suite\n- CLI interface\n\n🤖 Generated with [Claude Code](https://claude.ai/claude-code)\nEOF\n)\")",
+      "Bash(gh auth status:*)",
+      "Bash(git remote add:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(python -m pytest:*)"
     ]
   }
 }

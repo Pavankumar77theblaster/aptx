@@ -465,7 +465,7 @@ class Database:
         safe_mode: bool = True,
         scope_id: Optional[str] = None,
         owner: Optional[str] = None
-    ) -> Scan:
+    ) -> Dict:
         """Create a new scan."""
         with self.session() as session:
             scan = Scan(
@@ -480,8 +480,7 @@ class Database:
             )
             session.add(scan)
             session.flush()
-            scan_dict = scan.to_dict()
-            return scan
+            return scan.to_dict()
 
     def get_scan(self, scan_id: str) -> Optional[Dict]:
         """Get scan by ID."""

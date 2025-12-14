@@ -298,7 +298,7 @@ class AuditLogger:
         self.audit_logger.handle(record)
 
         # Also log to main logger at INFO level
-        self.info(f"[AUDIT:{action_str}] {message}", **audit_entry)
+        self.info(f"[AUDIT:{action_str}] {message}", audit_data=audit_entry)
 
     def log_scope_check(
         self,

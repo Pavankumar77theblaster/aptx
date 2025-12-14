@@ -116,14 +116,14 @@ class TestDatabaseToReporting:
         for i in range(3):
             finding = sample_finding.copy()
             finding["title"] = f"Finding {i}"
-            clean_database.add_finding(scan_id=scan.id, **finding)
+            clean_database.add_finding(scan_id=scan["id"], **finding)
 
         # Retrieve findings
-        findings = clean_database.get_findings(scan.id)
+        findings = clean_database.get_findings(scan["id"])
         assert len(findings) == 3
 
         # Verify scan counts updated
-        updated_scan = clean_database.get_scan(scan.id)
+        updated_scan = clean_database.get_scan(scan["id"])
         assert updated_scan["total_findings"] == 3
 
 
@@ -251,13 +251,13 @@ class TestReportGeneration:
 
         # Create scan and add findings
         scan = clean_database.create_scan(target="example.com")
-        clean_database.add_finding(scan_id=scan.id, **sample_finding)
+        clean_database.add_finding(scan_id=scan["id"], **sample_finding)
 
-        findings = clean_database.get_findings(scan.id)
+        findings = clean_database.get_findings(scan["id"])
 
         # Generate report
         generator = ReportGenerator()
-        scan_data = clean_database.get_scan(scan.id)
+        scan_data = clean_database.get_scan(scan["id"])
 
         report_path = generator.generate(
             scan=scan_data,

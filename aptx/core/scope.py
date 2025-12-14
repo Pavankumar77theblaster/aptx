@@ -80,10 +80,7 @@ class ScopeValidator:
         self.logger = get_logger().get_child("scope")
         self.config: ScopeConfig = config or ScopeConfig()
 
-        if config_file:
-            self.load_from_file(config_file)
-
-        # Compile rules
+        # Initialize rule containers first
         self._allowed_domains: Set[str] = set()
         self._allowed_wildcards: List[str] = []
         self._allowed_ips: Set[ipaddress.IPv4Address | ipaddress.IPv6Address] = set()
@@ -92,7 +89,12 @@ class ScopeValidator:
         self._blocked_ips: Set[ipaddress.IPv4Address | ipaddress.IPv6Address] = set()
         self._blocked_paths: List[re.Pattern] = []
 
-        self._compile_rules()
+        # Load from file if provided
+        if config_file:
+            self.load_from_file(config_file)
+        else:
+            # Compile rules from config
+            self._compile_rules()
 
     def load_from_file(self, path: Union[str, Path]) -> None:
         """

@@ -70,9 +70,9 @@ postgres = [
 aptx = "aptx.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/aptx-framework/aptx"
-Documentation = "https://aptx-framework.github.io/docs"
-Repository = "https://github.com/aptx-framework/aptx"
+Homepage = "https://github.com/Pavankumar77theblaster/aptx"
+Documentation = "https://github.com/Pavankumar77theblaster/aptx#readme"
+Repository = "https://github.com/Pavankumar77theblaster/aptx"
 
 [tool.setuptools.packages.find]
 where = ["."]
