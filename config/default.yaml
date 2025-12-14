@@ -1,0 +1,227 @@
+# APT-X Default Configuration
+# ==============================
+# This file contains the default settings for APT-X.
+# Override these settings in config/local.yaml (git-ignored)
+
+# General Settings
+general:
+  project_name: "APT-X"
+  version: "1.0.0"
+  data_dir: "~/.aptx/data"
+  log_dir: "~/.aptx/logs"
+
+# Database Configuration
+database:
+  # Options: sqlite, postgresql
+  engine: "sqlite"
+  sqlite:
+    path: "~/.aptx/aptx.db"
+  postgresql:
+    host: "localhost"
+    port: 5432
+    database: "aptx"
+    username: "aptx"
+    password: ""  # Set in local.yaml or environment variable
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  audit_enabled: true
+  audit_file: "~/.aptx/logs/audit.log"
+  console_output: true
+  file_output: true
+  max_file_size_mb: 10
+  backup_count: 5
+
+# Safety & Authorization
+safety:
+  # Require explicit authorization before scanning
+  require_authorization: true
+  # Enable safe mode by default (non-destructive testing)
+  safe_mode: true
+  # Maximum concurrent requests
+  max_concurrent_requests: 10
+  # Default rate limit (requests per second)
+  rate_limit: 10
+  # Request timeout in seconds
+  request_timeout: 30
+  # User agent for HTTP requests
+  user_agent: "APT-X Security Scanner/1.0"
+
+# Scope Enforcement
+scope:
+  # Enable strict scope enforcement
+  strict_mode: true
+  # Block private IP ranges by default
+  block_private_ips: true
+  # Block localhost by default
+  block_localhost: true
+  # Allowlist file path (IP ranges, domains)
+  allowlist_file: ""
+  # Blocklist file path
+  blocklist_file: ""
+
+# Reconnaissance Settings
+recon:
+  # Subdomain enumeration
+  subdomain:
+    enabled: true
+    tools: ["amass", "subfinder"]
+    timeout: 300
+    max_subdomains: 1000
+  # Port scanning
+  port_scan:
+    enabled: true
+    tool: "nmap"
+    ports: "1-1000"
+    scan_type: "SYN"  # SYN, TCP, UDP
+    timeout: 600
+  # Web discovery
+  web_discovery:
+    enabled: true
+    tool: "httpx"
+    follow_redirects: true
+    timeout: 30
+
+# Discovery Settings
+discovery:
+  # Web crawler
+  crawler:
+    enabled: true
+    max_depth: 3
+    max_pages: 500
+    respect_robots: true
+    timeout: 30
+  # Directory fuzzing
+  fuzzing:
+    enabled: true
+    tool: "ffuf"
+    wordlist: "common.txt"
+    extensions: ["php", "asp", "aspx", "jsp", "html", "js"]
+    threads: 40
+    timeout: 300
+  # Parameter discovery
+  parameters:
+    enabled: true
+    methods: ["GET", "POST"]
+    common_params: true
+
+# Vulnerability Scanning
+vulnerabilities:
+  # Enable/disable specific scanners
+  scanners:
+    sqli:
+      enabled: true
+      safe_mode: true
+      time_based: false  # Disabled in safe mode
+    xss:
+      enabled: true
+      types: ["reflected", "stored", "dom"]
+    idor:
+      enabled: true
+    auth_bypass:
+      enabled: true
+    file_upload:
+      enabled: true
+      safe_extensions: [".txt", ".pdf"]
+    command_injection:
+      enabled: true
+      safe_mode: true
+    ssrf:
+      enabled: true
+      callback_server: ""
+    open_redirect:
+      enabled: true
+    misconfig:
+      enabled: true
+  # Confidence threshold (0-100)
+  confidence_threshold: 50
+  # Maximum findings per type
+  max_findings_per_type: 100
+
+# Validation Settings
+validation:
+  enabled: true
+  safe_mode: true
+  max_validation_attempts: 3
+  poc_generation: true
+
+# Intelligence Engine
+intelligence:
+  enabled: true
+  auto_classification: true
+  learning_enabled: true
+  # Feedback storage
+  feedback_retention_days: 365
+
+# Data Feeds
+data_feeds:
+  enabled: true
+  auto_update: false
+  update_interval_hours: 24
+  sources:
+    payloads_all_the_things:
+      enabled: true
+      repo: "swisskyrepo/PayloadsAllTheThings"
+    seclists:
+      enabled: true
+      repo: "danielmiessler/SecLists"
+    nuclei_templates:
+      enabled: true
+      repo: "projectdiscovery/nuclei-templates"
+
+# Automation
+automation:
+  enabled: true
+  scheduler:
+    enabled: false
+    timezone: "UTC"
+  workflow:
+    default_stages:
+      - "recon"
+      - "discovery"
+      - "vulnerability_scan"
+      - "validation"
+      - "report"
+
+# Reporting
+reporting:
+  default_format: "html"
+  include_evidence: true
+  include_poc: true
+  include_remediation: true
+  cvss_version: "3.1"
+  templates_dir: ""
+  output_dir: "~/.aptx/reports"
+
+# Collaboration
+collaboration:
+  enabled: false
+  sync_enabled: false
+  git_remote: ""
+
+# Web UI
+ui:
+  enabled: true
+  host: "127.0.0.1"
+  port: 8080
+  debug: false
+  secret_key: ""  # Set in local.yaml or generate on first run
+
+# Plugin System
+plugins:
+  enabled: true
+  directory: "~/.aptx/plugins"
+  auto_load: true
+
+# Tool Paths (override if not in PATH)
+tools:
+  nmap: "nmap"
+  amass: "amass"
+  subfinder: "subfinder"
+  httpx: "httpx"
+  nuclei: "nuclei"
+  ffuf: "ffuf"
+  nikto: "nikto"
+  sqlmap: "sqlmap"
