@@ -17,18 +17,49 @@ APT-X is a modular, intelligent, and extensible penetration testing framework de
 
 ## Quick Start
 
-### Installation
+### Installation on Kali Linux
 
 ```bash
-# Clone the repository
-git clone https://github.com/aptx-framework/aptx.git
+# Clone the repository (HTTPS)
+git clone https://github.com/Pavankumar77theblaster/aptx.git
 cd aptx
+
+# OR clone via SSH (passwordless - recommended)
+git clone git@github.com:Pavankumar77theblaster/aptx.git
+cd aptx
+
+# Create virtual environment (REQUIRED on Kali Linux)
+python3 -m venv venv
+source venv/bin/activate
 
 # Install dependencies
 pip install -e .
 
 # Initialize APT-X
 aptx init
+```
+
+### Quick Install Script
+
+```bash
+# One-liner installation
+git clone https://github.com/Pavankumar77theblaster/aptx.git && cd aptx && python3 -m venv venv && source venv/bin/activate && pip install -e . && aptx init
+```
+
+### SSH Key Setup (for passwordless git)
+
+If you want to avoid password prompts when cloning:
+
+```bash
+# Generate SSH key (if you don't have one)
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+# Copy the public key
+cat ~/.ssh/id_ed25519.pub
+
+# Add this key to GitHub: Settings -> SSH and GPG keys -> New SSH key
+# Then clone using SSH URL
+git clone git@github.com:Pavankumar77theblaster/aptx.git
 ```
 
 ### Basic Usage
@@ -159,7 +190,17 @@ Access at `http://localhost:8080` after running `aptx ui`.
 
 - Python 3.9+
 - Kali Linux (recommended) or Linux with security tools installed
+- Virtual environment (required on Kali Linux due to PEP 668)
 - Nmap, Amass, Subfinder, httpx (optional but recommended)
+
+### Why Virtual Environment?
+
+Kali Linux (and other modern distros) use PEP 668 which prevents installing Python packages system-wide with pip. This protects your system Python environment. Always use a virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate  # Run this each time you use APT-X
+```
 
 ## Legal Notice
 

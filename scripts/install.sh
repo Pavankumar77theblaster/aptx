@@ -98,16 +98,46 @@ check_pip() {
     log_success "pip is available"
 }
 
+setup_venv() {
+    log_info "Setting up virtual environment..."
+
+    cd "$PROJECT_ROOT"
+    VENV_DIR="$PROJECT_ROOT/venv"
+
+    # Check if venv already exists
+    if [ -d "$VENV_DIR" ]; then
+        log_info "Virtual environment already exists at $VENV_DIR"
+    else
+        log_info "Creating virtual environment..."
+        python3 -m venv "$VENV_DIR" || {
+            log_error "Failed to create virtual environment"
+            log_info "Try: sudo apt install python3-venv"
+            exit 1
+        }
+        log_success "Virtual environment created"
+    fi
+
+    # Activate venv
+    source "$VENV_DIR/bin/activate"
+    log_success "Virtual environment activated"
+
+    # Upgrade pip in venv
+    pip install --upgrade pip > /dev/null 2>&1
+}
+
 install_aptx() {
     log_info "Installing APT-X..."
 
     cd "$PROJECT_ROOT"
 
+    # Setup virtual environment (required on Kali Linux due to PEP 668)
+    setup_venv
+
     if [ "$INSTALL_DEV" = true ]; then
         log_info "Installing with development dependencies..."
-        pip3 install -e ".[dev]"
+        pip install -e ".[dev]"
     else
-        pip3 install -e .
+        pip install -e .
     fi
 
     log_success "APT-X installed successfully"
@@ -285,6 +315,11 @@ echo ""
 log_success "Installation complete!"
 echo ""
 echo "To get started:"
+echo ""
+echo "  # IMPORTANT: Activate virtual environment first (required each session)"
+echo "  source $PROJECT_ROOT/venv/bin/activate"
+echo ""
+echo "  # Then use APT-X"
 echo "  aptx --help          # Show available commands"
 echo "  aptx init            # Initialize configuration"
 echo "  aptx scan example.com --safe-mode  # Run a scan"
